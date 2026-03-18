@@ -1,6 +1,12 @@
-# Fougasse
+<p align="center">
+  <img src="resources/logo-fougasse-readme.png" alt="Fougasse" width="200" />
+</p>
 
-**Moteur de memoire persistante locale pour LLM multi-clients via MCP**
+<h1 align="center">Fougasse</h1>
+
+<p align="center">
+  <strong>Moteur de memoire persistante locale pour LLM multi-clients via MCP</strong>
+</p>
 
 Fougasse centralise le contexte entre tous vos clients LLM (Claude Desktop, Claude Code, Cursor, Windsurf...). Plus jamais de copier-coller entre vos conversations IA.
 
