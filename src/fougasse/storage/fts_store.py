@@ -28,16 +28,23 @@ def search_bm25(
     limit: int = 10,
 ) -> list[tuple[str, float]]:
     """BM25 full-text search returning (memory_id, rank) pairs. Lower rank = more relevant."""
-    # Escape FTS5 special characters
-    safe_query = query.replace('"', '""')
+    # Sanitize for FTS5: remove special operators, keep only words
+    import re
+    words = re.findall(r'\w+', query, re.UNICODE)
+    if not words:
+        return []
+    safe_query = " ".join(words)
 
-    rows = db.execute(
-        """SELECT memory_id, rank
-           FROM fts_memories
-           WHERE fts_memories MATCH ?
-           ORDER BY rank
-           LIMIT ?""",
-        (safe_query, limit),
-    ).fetchall()
+    try:
+        rows = db.execute(
+            """SELECT memory_id, rank
+               FROM fts_memories
+               WHERE fts_memories MATCH ?
+               ORDER BY rank
+               LIMIT ?""",
+            (safe_query, limit),
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return []
 
     return [(row[0], row[1]) for row in rows]
