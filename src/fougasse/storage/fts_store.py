@@ -30,7 +30,8 @@ def search_bm25(
     """BM25 full-text search returning (memory_id, rank) pairs. Lower rank = more relevant."""
     # Sanitize for FTS5: remove special operators, keep only words
     import re
-    words = re.findall(r'\w+', query, re.UNICODE)
+
+    words = re.findall(r"\w+", query, re.UNICODE)
     if not words:
         return []
     safe_query = " ".join(words)

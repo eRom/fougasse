@@ -90,7 +90,9 @@ def prune(hard: bool, json_output: bool) -> None:
     if json_output:
         click.echo(json.dumps(result))
     else:
-        console.print(f"[green]Pruned {count} archived memories[/green] ({'hard' if hard else 'soft'})")
+        console.print(
+            f"[green]Pruned {count} archived memories[/green] ({'hard' if hard else 'soft'})"
+        )
 
     db.close()
 
@@ -146,6 +148,7 @@ def import_cmd(file: str) -> None:
                 metadata=mem_data.get("metadata"),
             )
             from fougasse.storage.memory_store import insert_memory
+
             insert_memory(db, create)
             imported += 1
         except Exception as e:
@@ -165,13 +168,15 @@ def vaults(json_output: bool) -> None:
     vault_list = []
     for row in rows:
         mc = count_memories(db, vault_id=row["id"])
-        vault_list.append({
-            "id": row["id"],
-            "name": row["name"],
-            "description": row["description"],
-            "memory_count": mc,
-            "created_at": row["created_at"],
-        })
+        vault_list.append(
+            {
+                "id": row["id"],
+                "name": row["name"],
+                "description": row["description"],
+                "memory_count": mc,
+                "created_at": row["created_at"],
+            }
+        )
 
     if json_output:
         click.echo(json.dumps(vault_list, indent=2))
@@ -267,6 +272,29 @@ def stats(json_output: bool) -> None:
         table.add_row("By vault", json.dumps(by_vault))
         table.add_row("Top tags", json.dumps(top_tags))
         console.print(table)
+
+    db.close()
+
+
+@main.command()
+@click.option("--vault", default=None, help="Filter by vault.")
+@click.option("--output", "-o", default=None, help="Output HTML file path.")
+@click.option("--no-open", is_flag=True, help="Don't open in browser.")
+def graph(vault: str | None, output: str | None, no_open: bool) -> None:
+    """Open interactive knowledge graph in browser."""
+    from pathlib import Path
+
+    from fougasse.graph.visualizer import open_graph
+
+    db = _get_db()
+    out_path = Path(output) if output else None
+
+    console.print("[cyan]Building knowledge graph visualization...[/cyan]")
+    result = open_graph(db, output_path=out_path, vault_id=vault, open_browser=not no_open)
+    console.print(f"[green]Graph saved to {result}[/green]")
+
+    if not no_open:
+        console.print("[dim]Opened in browser.[/dim]")
 
     db.close()
 

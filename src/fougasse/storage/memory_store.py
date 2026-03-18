@@ -16,7 +16,10 @@ def _uuid7() -> str:
 
 def _row_to_memory(row: sqlite3.Row, db: sqlite3.Connection) -> Memory:
     """Convert a database row to a Memory model."""
-    tags = [r["tag"] for r in db.execute("SELECT tag FROM tags WHERE memory_id = ?", (row["id"],)).fetchall()]
+    tags = [
+        r["tag"]
+        for r in db.execute("SELECT tag FROM tags WHERE memory_id = ?", (row["id"],)).fetchall()
+    ]
     metadata = json.loads(row["metadata"]) if row["metadata"] else None
     return Memory(
         id=row["id"],
@@ -44,7 +47,16 @@ def insert_memory(db: sqlite3.Connection, data: MemoryCreate) -> Memory:
         db.execute(
             """INSERT INTO memories (id, content, type, vault_id, source_agent, metadata, created_at, updated_at)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-            (memory_id, data.content, data.type.value, data.vault_id, data.source_agent, metadata_json, now, now),
+            (
+                memory_id,
+                data.content,
+                data.type.value,
+                data.vault_id,
+                data.source_agent,
+                metadata_json,
+                now,
+                now,
+            ),
         )
         for tag in data.tags:
             db.execute("INSERT INTO tags (memory_id, tag) VALUES (?, ?)", (memory_id, tag))
@@ -100,7 +112,9 @@ def update_memory(db: sqlite3.Connection, memory_id: str, data: MemoryUpdate) ->
 
         # Update FTS index
         db.execute("DELETE FROM fts_memories WHERE memory_id = ?", (memory_id,))
-        updated_row = db.execute("SELECT content FROM memories WHERE id = ?", (memory_id,)).fetchone()
+        updated_row = db.execute(
+            "SELECT content FROM memories WHERE id = ?", (memory_id,)
+        ).fetchone()
         tag_rows = db.execute("SELECT tag FROM tags WHERE memory_id = ?", (memory_id,)).fetchall()
         tags_str = " ".join(r["tag"] for r in tag_rows)
         db.execute(

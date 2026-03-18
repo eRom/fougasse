@@ -59,9 +59,7 @@ def update_all_vitalities(
     decay_d: float = 0.5,
 ) -> int:
     """Recalculate vitality scores for all active memories. Returns count updated."""
-    rows = db.execute(
-        "SELECT id FROM memories WHERE is_archived = 0"
-    ).fetchall()
+    rows = db.execute("SELECT id FROM memories WHERE is_archived = 0").fetchall()
 
     updated = 0
     for row in rows:

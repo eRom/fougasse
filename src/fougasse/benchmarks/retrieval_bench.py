@@ -14,10 +14,35 @@ from fougasse.storage.vector_store import ensure_vec_table, insert_vector
 
 
 def _random_content(word_count: int = 20) -> str:
-    words = ["python", "rust", "docker", "api", "database", "memory", "graph",
-             "search", "deploy", "test", "build", "config", "server", "client",
-             "model", "train", "data", "query", "index", "cache", "async",
-             "function", "class", "module", "package", "framework", "library"]
+    words = [
+        "python",
+        "rust",
+        "docker",
+        "api",
+        "database",
+        "memory",
+        "graph",
+        "search",
+        "deploy",
+        "test",
+        "build",
+        "config",
+        "server",
+        "client",
+        "model",
+        "train",
+        "data",
+        "query",
+        "index",
+        "cache",
+        "async",
+        "function",
+        "class",
+        "module",
+        "package",
+        "framework",
+        "library",
+    ]
     return " ".join(random.choices(words, k=word_count))
 
 

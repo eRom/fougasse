@@ -52,8 +52,7 @@ def hybrid_search(
     fts_results = search_bm25(db, query.query, limit=fetch_k)
     if query.vault_id:
         fts_results = [
-            (mid, rank) for mid, rank in fts_results
-            if _memory_in_vault(db, mid, query.vault_id)
+            (mid, rank) for mid, rank in fts_results if _memory_in_vault(db, mid, query.vault_id)
         ]
 
     ranked_lists: list[list[tuple[str, float]]] = [vec_results, fts_results]

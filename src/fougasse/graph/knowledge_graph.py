@@ -15,12 +15,14 @@ class KnowledgeGraph:
     graph: nx.DiGraph = field(default_factory=nx.DiGraph)
 
     # Valid relation types
-    RELATION_TYPES = frozenset({
-        "relates_to",
-        "supersedes",
-        "conflicts_with",
-        "tagged_with",
-    })
+    RELATION_TYPES = frozenset(
+        {
+            "relates_to",
+            "supersedes",
+            "conflicts_with",
+            "tagged_with",
+        }
+    )
 
     def add_memory_node(self, memory_id: str, label: str, **attrs: Any) -> None:
         """Add a memory node to the graph."""

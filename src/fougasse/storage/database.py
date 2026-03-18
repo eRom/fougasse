@@ -69,7 +69,9 @@ def run_migrations(db: sqlite3.Connection, migrations_dir: Path | None = None) -
     return applied
 
 
-def init_database(db_path: Path | str = ":memory:", migrations_dir: Path | None = None) -> sqlite3.Connection:
+def init_database(
+    db_path: Path | str = ":memory:", migrations_dir: Path | None = None
+) -> sqlite3.Connection:
     """Initialize database: connect, run migrations, return connection."""
     db = get_connection(db_path)
     run_migrations(db, migrations_dir)

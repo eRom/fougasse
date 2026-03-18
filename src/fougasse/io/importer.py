@@ -31,7 +31,12 @@ def import_memories(
         try:
             db.execute(
                 "INSERT OR IGNORE INTO vaults (id, name, description, created_at) VALUES (?, ?, ?, ?)",
-                (vault_data["id"], vault_data["name"], vault_data.get("description"), vault_data.get("created_at", "")),
+                (
+                    vault_data["id"],
+                    vault_data["name"],
+                    vault_data.get("description"),
+                    vault_data.get("created_at", ""),
+                ),
             )
         except Exception:
             pass

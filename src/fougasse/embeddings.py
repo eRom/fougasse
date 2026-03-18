@@ -21,7 +21,9 @@ def _get_device() -> str:
     return "cpu"
 
 
-def load_model(model_name: str = "BAAI/bge-base-en-v1.5", cache_dir: Path | None = None) -> SentenceTransformer:
+def load_model(
+    model_name: str = "BAAI/bge-base-en-v1.5", cache_dir: Path | None = None
+) -> SentenceTransformer:
     """Load the embedding model (cached singleton)."""
     global _model, _model_name
 

@@ -120,5 +120,11 @@ def save_node(kg: KnowledgeGraph, db: sqlite3.Connection, node_id: str) -> None:
                 """INSERT OR REPLACE INTO graph_edges
                    (source_id, target_id, relation, weight, created_at)
                    VALUES (?, ?, ?, ?, ?)""",
-                (node_id, target, eattrs.get("relation", "relates_to"), eattrs.get("weight", 1.0), now),
+                (
+                    node_id,
+                    target,
+                    eattrs.get("relation", "relates_to"),
+                    eattrs.get("weight", 1.0),
+                    now,
+                ),
             )

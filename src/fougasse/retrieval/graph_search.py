@@ -37,18 +37,14 @@ def spreading_activation(
                 edge_data = kg.graph.edges[node_id, neighbor]
                 weight = edge_data.get("weight", 1.0)
                 spread = score * factor * weight
-                new_activation[neighbor] = max(
-                    new_activation.get(neighbor, 0.0), spread
-                )
+                new_activation[neighbor] = max(new_activation.get(neighbor, 0.0), spread)
 
             # Spread to predecessors
             for neighbor in kg.graph.predecessors(node_id):
                 edge_data = kg.graph.edges[neighbor, node_id]
                 weight = edge_data.get("weight", 1.0)
                 spread = score * factor * weight
-                new_activation[neighbor] = max(
-                    new_activation.get(neighbor, 0.0), spread
-                )
+                new_activation[neighbor] = max(new_activation.get(neighbor, 0.0), spread)
 
         # Merge new activations
         for node_id, score in new_activation.items():

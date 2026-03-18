@@ -40,11 +40,10 @@ def archive_stale_memories(
 
     for row in rows:
         # Check if pinned (metadata contains "pinned": true)
-        meta_row = db.execute(
-            "SELECT metadata FROM memories WHERE id = ?", (row["id"],)
-        ).fetchone()
+        meta_row = db.execute("SELECT metadata FROM memories WHERE id = ?", (row["id"],)).fetchone()
         if meta_row and meta_row["metadata"]:
             import json
+
             try:
                 meta = json.loads(meta_row["metadata"])
                 if meta.get("pinned"):
@@ -85,9 +84,7 @@ def resurrect_memory(
     boost_score: float = 1.0,
 ) -> bool:
     """Resurrect an archived memory by unarchiving and boosting vitality."""
-    row = db.execute(
-        "SELECT is_archived FROM memories WHERE id = ?", (memory_id,)
-    ).fetchone()
+    row = db.execute("SELECT is_archived FROM memories WHERE id = ?", (memory_id,)).fetchone()
 
     if not row or not row["is_archived"]:
         return False

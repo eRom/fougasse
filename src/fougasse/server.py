@@ -14,6 +14,9 @@ from mcp.server.fastmcp import FastMCP
 from fougasse import __version__
 from fougasse.config import FougasseConfig, load_config
 from fougasse.embeddings import encode, load_model
+from fougasse.graph.entity_linker import link_memory
+from fougasse.graph.knowledge_graph import KnowledgeGraph
+from fougasse.graph.persistence import load_graph, save_node
 from fougasse.models import (
     FougasseStatus,
     MemoryCreate,
@@ -37,6 +40,7 @@ class AppContext:
     db: sqlite3.Connection
     config: FougasseConfig
     start_time: float
+    kg: KnowledgeGraph | None = None
 
 
 @asynccontextmanager
@@ -52,10 +56,13 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
     # Pre-load embedding model
     load_model(config.model_name, cache_dir=config.models_dir)
 
+    # Load knowledge graph
+    kg = load_graph(db)
+
     start_time = time.time()
 
     try:
-        yield AppContext(db=db, config=config, start_time=start_time)
+        yield AppContext(db=db, config=config, start_time=start_time, kg=kg)
     finally:
         db.close()
 
@@ -113,13 +120,20 @@ async def fougasse_remember(
     embedding = encode(content)
     insert_vector(app.db, mem.id, vault_id, embedding)
 
+    # Update knowledge graph
+    if app.kg is not None:
+        link_memory(app.kg, mem)
+        save_node(app.kg, app.db, mem.id)
+
     return {
         "status": "stored",
         "id": mem.id,
         "type": mem.type.value,
         "vault_id": mem.vault_id,
         "tags": mem.tags,
-        "created_at": mem.created_at.isoformat() if hasattr(mem.created_at, 'isoformat') else str(mem.created_at),
+        "created_at": mem.created_at.isoformat()
+        if hasattr(mem.created_at, "isoformat")
+        else str(mem.created_at),
     }
 
 
@@ -269,13 +283,15 @@ async def fougasse_vaults(
         vaults = []
         for row in rows:
             mc = count_memories(app.db, vault_id=row["id"])
-            vaults.append({
-                "id": row["id"],
-                "name": row["name"],
-                "description": row["description"],
-                "memory_count": mc,
-                "created_at": row["created_at"],
-            })
+            vaults.append(
+                {
+                    "id": row["id"],
+                    "name": row["name"],
+                    "description": row["description"],
+                    "memory_count": mc,
+                    "created_at": row["created_at"],
+                }
+            )
         return {"vaults": vaults}
 
     if action == "create":
@@ -305,6 +321,41 @@ async def fougasse_vaults(
         return {"status": "deleted", "name": name}
 
     return {"error": f"Unknown action '{action}'. Use: list, create, delete."}
+
+
+@mcp.tool()
+async def fougasse_graph(
+    vault_id: str | None = None,
+) -> dict[str, Any]:
+    """Generate and open an interactive knowledge graph visualization in the browser.
+
+    Args:
+        vault_id: Optional vault to filter by.
+
+    Returns:
+        Path to the generated HTML file and graph stats.
+    """
+    ctx = mcp.get_context()
+    app: AppContext = ctx.request_context.lifespan_context
+
+    from fougasse.graph.community_detector import compute_pagerank, detect_communities
+    from fougasse.graph.persistence import save_graph
+    from fougasse.graph.visualizer import open_graph
+
+    # Recompute PageRank and communities before visualization
+    if app.kg and app.kg.node_count > 0:
+        compute_pagerank(app.kg)
+        detect_communities(app.kg)
+        save_graph(app.kg, app.db)
+
+    result_path = open_graph(app.db, vault_id=vault_id, open_browser=True)
+
+    return {
+        "status": "graph_opened",
+        "path": str(result_path),
+        "nodes": app.kg.node_count if app.kg else 0,
+        "edges": app.kg.edge_count if app.kg else 0,
+    }
 
 
 def run_server() -> None:
