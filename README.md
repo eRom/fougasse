@@ -10,6 +10,9 @@
 
 Fougasse centralise le contexte entre tous vos clients LLM (Claude Desktop, Claude Code, Cursor, Windsurf...). Plus jamais de copier-coller entre vos conversations IA.
 
+> Voir aussi [Cruchot](https://github.com/eRom/cruchot) 
+
+
 <p align="center">
   <img src="resources/infographie.png" alt="Infographie Fougasse" width="800" />
 </p>
