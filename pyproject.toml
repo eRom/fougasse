@@ -1,0 +1,85 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fougasse"
+version = "0.1.0"
+description = "Moteur de memoire persistante locale pour LLM multi-clients via MCP"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    { name = "Romain Music", email = "music.music@gmail.com" },
+]
+keywords = ["mcp", "memory", "llm", "local", "knowledge-graph"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "mcp>=1.12",
+    "sentence-transformers>=3.0",
+    "sqlite-vec>=0.1",
+    "networkx>=3.0",
+    "click>=8.0",
+    "rich>=13.0",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+]
+rerank = [
+    "sentence-transformers>=3.0",
+]
+
+[project.scripts]
+fougasse = "fougasse.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/eRom/fougasse"
+Repository = "https://github.com/eRom/fougasse"
+Issues = "https://github.com/eRom/fougasse/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fougasse"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM"]
+ignore = ["E501", "UP042", "B017", "B905", "A002", "E731", "SIM110", "SIM102", "SIM105", "B007"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["fougasse"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 70
