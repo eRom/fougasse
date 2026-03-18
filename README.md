@@ -10,6 +10,10 @@
 
 Fougasse centralise le contexte entre tous vos clients LLM (Claude Desktop, Claude Code, Cursor, Windsurf...). Plus jamais de copier-coller entre vos conversations IA.
 
+<p align="center">
+  <img src="resources/infographie.png" alt="Infographie Fougasse" width="800" />
+</p>
+
 ## Fonctionnalites
 
 - Stockage local persistant (zero cloud, zero donnees en transit)
