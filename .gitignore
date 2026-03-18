@@ -36,6 +36,11 @@ htmlcov/
 .pytest_cache/
 .mypy_cache/
 
-# Specs & memory (keep in repo)
+# Specs (keep in repo)
 # .specs/
-# .memory/
+
+# Memory (local session context, not committed)
+.memory/
+
+# pyvis generated libs
+lib/

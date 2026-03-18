@@ -105,3 +105,18 @@ tests/
 - Validate all MCP tool inputs via Pydantic
 - Soft-delete by default, hard-delete requires explicit flag
 - Provenance tracking on every write (source_agent, timestamp)
+
+## Contexte projet (.memory)
+
+Au demarrage de chaque session, lis ces fichiers pour charger le contexte du projet :
+- .memory/architecture.md
+- .memory/key-files.md
+- .memory/patterns.md
+- .memory/gotchas.md
+
+Apres lecture, affiche un resume compact :
+- Projet : [nom/type]
+- Stack : [technos principales]
+- Fichiers cles : [nombre]
+- Gotchas : [nombre]
+- Pret a travailler.
