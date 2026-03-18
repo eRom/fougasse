@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sqlite3
 
 import click
 from rich.console import Console
@@ -16,7 +17,7 @@ from fougasse.storage.memory_store import count_memories, delete_memory, list_me
 console = Console()
 
 
-def _get_db():
+def _get_db() -> sqlite3.Connection:
     """Get database connection from config."""
     config = load_config()
     config.ensure_dirs()

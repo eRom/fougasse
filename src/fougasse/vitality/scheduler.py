@@ -26,7 +26,7 @@ class VitalityScheduler:
         self.interval_seconds = interval_hours * 3600
         self.decay_d = decay_d
         self.archive_threshold = archive_threshold
-        self._task: asyncio.Task | None = None
+        self._task: asyncio.Task[None] | None = None
         self._running = False
 
     async def start(self) -> None:
@@ -62,7 +62,7 @@ class VitalityScheduler:
             except Exception:
                 logger.exception("Error in vitality scheduler cycle")
 
-    def run_cycle(self) -> dict:
+    def run_cycle(self) -> dict[str, int]:
         """Execute one cycle: update vitalities + archive stale."""
         updated = update_all_vitalities(self.db, decay_d=self.decay_d)
         archive_result = archive_stale_memories(self.db, threshold=self.archive_threshold)

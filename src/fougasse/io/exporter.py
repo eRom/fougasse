@@ -15,11 +15,11 @@ def export_memories(
     output_path: Path | None = None,
     vault_id: str | None = None,
     include_graph: bool = True,
-) -> dict:
+) -> dict[str, object]:
     """Export memories (and optionally graph) to a JSON-serializable dict."""
     memories = list_memories(db, vault_id=vault_id, include_archived=True, limit=999999)
 
-    data: dict = {
+    data: dict[str, object] = {
         "fougasse_version": __version__,
         "export_format": "1.0",
         "count": len(memories),

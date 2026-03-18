@@ -66,7 +66,7 @@ def ensure_trust_table(db: sqlite3.Connection) -> None:
     db.commit()
 
 
-def get_all_trust_scores(db: sqlite3.Connection) -> list[dict]:
+def get_all_trust_scores(db: sqlite3.Connection) -> list[dict[str, object]]:
     """Get trust scores for all known agents."""
     ensure_trust_table(db)
     rows = db.execute("SELECT agent_id, alpha, beta FROM agent_trust").fetchall()

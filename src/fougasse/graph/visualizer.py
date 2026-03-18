@@ -43,7 +43,7 @@ def _get_memory_preview(db: sqlite3.Connection, memory_id: str, max_len: int = 8
     if not row:
         return memory_id
     content = row["content"]
-    return content[:max_len] + "..." if len(content) > max_len else content
+    return str(content[:max_len] + "..." if len(content) > max_len else content)
 
 
 def build_graph_html(
@@ -154,7 +154,8 @@ def build_graph_html(
 
         if node_type == "memory":
             mem_type = _get_memory_type(db, node_id)
-            color = _COLORS["memory"].get(mem_type, "#4FC3F7")
+            memory_colors: dict[str, str] = _COLORS["memory"]  # type: ignore[assignment]
+            color = memory_colors.get(mem_type, "#4FC3F7")
             preview = _get_memory_preview(db, node_id)
             size = 15 + pagerank * 500  # Scale by PageRank
             shape = "dot"
@@ -168,7 +169,7 @@ def build_graph_html(
             display_label = label[:30] + "..." if len(label) > 30 else label
         else:
             # Entity node (tag)
-            color = _COLORS["entity"]
+            color = str(_COLORS["entity"])
             size = 10
             shape = "diamond"
             tag_name = label if not node_id.startswith("tag:") else node_id[4:]
@@ -193,7 +194,8 @@ def build_graph_html(
 
         relation = attrs.get("relation", "relates_to")
         weight = attrs.get("weight", 1.0)
-        color = _COLORS["edge"].get(relation, "#546E7A")
+        edge_colors: dict[str, str] = _COLORS["edge"]  # type: ignore[assignment]
+        color = edge_colors.get(relation, "#546E7A")
 
         # Thicker edges for stronger relations
         edge_width = 1 + weight * 2

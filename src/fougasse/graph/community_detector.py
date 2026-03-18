@@ -21,7 +21,7 @@ def compute_pagerank(kg: KnowledgeGraph, alpha: float = 0.85) -> dict[str, float
     for node_id, score in scores.items():
         kg.graph.nodes[node_id]["pagerank"] = score
 
-    return scores
+    return dict(scores)
 
 
 def detect_communities(kg: KnowledgeGraph) -> dict[str, int]:
@@ -55,7 +55,7 @@ def detect_communities(kg: KnowledgeGraph) -> dict[str, int]:
         return mapping
 
 
-def get_community_summary(kg: KnowledgeGraph) -> list[dict]:
+def get_community_summary(kg: KnowledgeGraph) -> list[dict[str, object]]:
     """Get summary of detected communities."""
     communities: dict[int, list[str]] = {}
 

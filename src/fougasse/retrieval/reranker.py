@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from fougasse.models import SearchResultItem
 
-_reranker = None
+_reranker: Any = None
 _reranker_name: str = ""
 
 
-def load_reranker(model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"):
+def load_reranker(model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2") -> Any:
     """Load cross-encoder model (lazy singleton)."""
     global _reranker, _reranker_name
 

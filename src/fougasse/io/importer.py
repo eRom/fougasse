@@ -14,7 +14,7 @@ def import_memories(
     db: sqlite3.Connection,
     input_path: Path,
     re_embed: bool = True,
-) -> dict:
+) -> dict[str, object]:
     """Import memories from a JSON export file.
 
     Returns summary of import results.

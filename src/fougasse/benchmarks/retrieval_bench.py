@@ -56,7 +56,7 @@ def run_benchmark(
     count: int = 1000,
     dim: int = 4,  # Small dim for benchmark speed
     queries: int = 100,
-) -> dict:
+) -> dict[str, object]:
     """Run retrieval benchmark with synthetic data.
 
     Uses small embedding dimensions for speed. Real-world uses 768.

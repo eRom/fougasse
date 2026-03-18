@@ -36,7 +36,7 @@ def compute_vitality(
             if ct.tzinfo is None:
                 ct = ct.replace(tzinfo=UTC)
             hours = max((ref - ct).total_seconds() / 3600.0, 1.0)
-            return hours ** (-decay_d)
+            return float(hours ** (-decay_d))
         except (ValueError, TypeError):
             return 0.5
 

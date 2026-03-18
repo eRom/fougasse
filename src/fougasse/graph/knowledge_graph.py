@@ -123,17 +123,17 @@ class KnowledgeGraph:
 
     @property
     def node_count(self) -> int:
-        return self.graph.number_of_nodes()
+        return int(self.graph.number_of_nodes())
 
     @property
     def edge_count(self) -> int:
-        return self.graph.number_of_edges()
+        return int(self.graph.number_of_edges())
 
     def has_node(self, node_id: str) -> bool:
-        return node_id in self.graph
+        return bool(node_id in self.graph)
 
     def has_edge(self, source_id: str, target_id: str) -> bool:
-        return self.graph.has_edge(source_id, target_id)
+        return bool(self.graph.has_edge(source_id, target_id))
 
     def get_node_attrs(self, node_id: str) -> dict[str, Any] | None:
         if node_id not in self.graph:
