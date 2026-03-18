@@ -40,9 +40,7 @@ def test_save_node_incremental() -> None:
     assert node is not None
     assert node["label"] == "Memory 1"
 
-    edge = db.execute(
-        "SELECT * FROM graph_edges WHERE source_id = 'mem-1'"
-    ).fetchone()
+    edge = db.execute("SELECT * FROM graph_edges WHERE source_id = 'mem-1'").fetchone()
     assert edge is not None
     assert edge["relation"] == "tagged_with"
     db.close()

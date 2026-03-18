@@ -245,7 +245,7 @@ def build_graph_html(
     # Replace inline style on div if present
     html = re.sub(
         r'(<div\s+id\s*=\s*"mynetwork"\s+style\s*=\s*")[^"]*(")',
-        r'\1width:100vw;height:100vh;\2',
+        r"\1width:100vw;height:100vh;\2",
         html,
     )
     # Strip bootstrap card padding + center headers

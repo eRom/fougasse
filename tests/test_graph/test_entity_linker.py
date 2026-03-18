@@ -10,8 +10,13 @@ from fougasse.models import Memory, MemoryType, utcnow
 def _make_memory(id: str, content: str, tags: list[str]) -> Memory:
     now = utcnow()
     return Memory(
-        id=id, content=content, type=MemoryType.TEXT, tags=tags,
-        vault_id="default", created_at=now, updated_at=now,
+        id=id,
+        content=content,
+        type=MemoryType.TEXT,
+        tags=tags,
+        vault_id="default",
+        created_at=now,
+        updated_at=now,
     )
 
 

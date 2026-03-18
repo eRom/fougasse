@@ -42,10 +42,7 @@ def test_init_database_memory() -> None:
     db = init_database()
     # Check tables exist
     tables = {
-        r[0]
-        for r in db.execute(
-            "SELECT name FROM sqlite_master WHERE type='table'"
-        ).fetchall()
+        r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
     }
     assert "memories" in tables
     assert "vaults" in tables

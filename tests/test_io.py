@@ -49,6 +49,7 @@ def test_export_import_roundtrip(tmp_path: Path) -> None:
 def test_import_with_errors(tmp_path: Path) -> None:
     # Create a file with invalid data
     import json
+
     bad_data = {
         "memories": [
             {"content": "Valid memory"},

@@ -32,10 +32,13 @@ def test_archive_stale() -> None:
 
 def test_archive_skips_pinned() -> None:
     db = init_database()
-    mem = insert_memory(db, MemoryCreate(
-        content="Pinned memory",
-        metadata={"pinned": True},
-    ))
+    mem = insert_memory(
+        db,
+        MemoryCreate(
+            content="Pinned memory",
+            metadata={"pinned": True},
+        ),
+    )
     db.execute("UPDATE memories SET vitality_score = 0.01 WHERE id = ?", (mem.id,))
     db.commit()
 
@@ -65,9 +68,7 @@ def test_resurrect_memory() -> None:
     assert fetched.vitality_score == 1.0
 
     # Check access log was created
-    log = db.execute(
-        "SELECT * FROM access_log WHERE memory_id = ?", (mem.id,)
-    ).fetchall()
+    log = db.execute("SELECT * FROM access_log WHERE memory_id = ?", (mem.id,)).fetchall()
     assert len(log) == 1
     db.close()
 
