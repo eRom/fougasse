@@ -215,8 +215,53 @@ def build_graph_html(
     net.html = None  # Reset
     net.save_graph(str(output_path))
 
-    # Post-process: inject Fougasse branding
+    # Post-process: fullscreen + branding
     html = output_path.read_text(encoding="utf-8")
+
+    # Force fullscreen: replace pyvis default 900px height + strip margins
+    import re
+
+    # Replace pyvis CSS block height: 900px → 100vh
+    html = re.sub(
+        r"(#mynetwork\s*\{[^}]*?)height:\s*\d+px",
+        r"\1height: 100vh",
+        html,
+        flags=re.DOTALL,
+    )
+    # Replace pyvis CSS width: 100% → 100vw
+    html = re.sub(
+        r"(#mynetwork\s*\{[^}]*?)width:\s*100%",
+        r"\1width: 100vw",
+        html,
+        flags=re.DOTALL,
+    )
+    # Remove border on #mynetwork
+    html = re.sub(
+        r"(#mynetwork\s*\{[^}]*?)border:\s*1px solid lightgray;",
+        r"\1border: none;",
+        html,
+        flags=re.DOTALL,
+    )
+    # Replace inline style on div if present
+    html = re.sub(
+        r'(<div\s+id\s*=\s*"mynetwork"\s+style\s*=\s*")[^"]*(")',
+        r'\1width:100vw;height:100vh;\2',
+        html,
+    )
+    # Strip bootstrap card padding + center headers
+    html = html.replace("<center>", "").replace("</center>", "")
+    html = re.sub(r"<h1>\s*</h1>", "", html)
+
+    fullscreen_css = """
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { overflow: hidden; width: 100vw; height: 100vh; background: #1a1a2e; }
+        .card { border: none !important; background: none !important; }
+        .card-body { padding: 0 !important; }
+    </style>
+    """
+    html = html.replace("</head>", fullscreen_css + "</head>")
+
     branding = """
     <div style="position:fixed;top:10px;left:10px;z-index:9999;
                 background:rgba(26,26,46,0.9);padding:12px 20px;
