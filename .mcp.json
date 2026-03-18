@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "fougasse": {
+      "command": "/opt/homebrew/bin/uv",
+      "args": [
+        "run",
+        "--directory",
+        "/Users/recarnot/dev/claude-desktop-mem",
+        "python",
+        "-m",
+        "fougasse.server"
+      ]
+    }
+  }
+}

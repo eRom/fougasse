@@ -310,3 +310,7 @@ async def fougasse_vaults(
 def run_server() -> None:
     """Run the Fougasse MCP server."""
     mcp.run(transport="stdio")
+
+
+if __name__ == "__main__":
+    run_server()
